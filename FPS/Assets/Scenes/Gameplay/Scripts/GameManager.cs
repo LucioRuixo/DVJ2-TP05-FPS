@@ -30,7 +30,7 @@ namespace Gameplay
 
         void Update()
         {
-            ghostTimer += Time.deltaTime;
+            //ghostTimer += Time.deltaTime;
             bombTimer += Time.deltaTime;
             if (ghostTimer >= ghostTimerTarget)
             { 
