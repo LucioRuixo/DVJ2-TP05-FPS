@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,10 +11,14 @@ public class Ghost : MonoBehaviour
     float rotationSpeed;
     float rotationRange;
     float rotationTarget;
+    float detectionRange;
 
     bool turningAround;
 
     Quaternion targetQuaternion;
+
+    public static Action<GameObject, float> CheckPlayerProximity;
+    public static Action OnPlayerDetected;
 
     void Start()
     {
@@ -22,7 +27,8 @@ public class Ghost : MonoBehaviour
         movementSpeed = 5f;
         rotationSpeed = 5f;
         rotationRange = 90f;
-        rotationTarget = Random.Range(-(rotationRange / 2), rotationRange / 2);
+        rotationTarget = UnityEngine.Random.Range(-(rotationRange / 2), rotationRange / 2);
+        detectionRange = 10f;
 
         turningAround = false;
 
@@ -36,17 +42,9 @@ public class Ghost : MonoBehaviour
         if (!turningAround)
             CheckPositionLimits();
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetQuaternion, Time.deltaTime * rotationSpeed);
-        if (transform.rotation == targetQuaternion)
-        {
-            if (turningAround)
-                turningAround = false;
-            
-            rotationTarget = Random.Range(-(rotationRange / 2), rotationRange / 2);
-            targetQuaternion = Quaternion.Euler(0, rotationTarget, 0);
-        }
-
-        Debug.Log(targetQuaternion);
+        transform.localRotation = Quaternion.Slerp(transform.localRotation, targetQuaternion, Time.deltaTime * rotationSpeed);
+        if (transform.localRotation == targetQuaternion)
+            UpdateRotationTarget();
     }
 
     void CheckPositionLimits()
@@ -62,11 +60,22 @@ public class Ghost : MonoBehaviour
 
         if (offLimitsX || offLimitsZ)
         {
-            turningAround = true;
+            //turningAround = true;
+            //
+            //Vector3 newRotation = transform.localRotation.eulerAngles;
+            //newRotation.y -= 180f;
+            //targetQuaternion = Quaternion.Euler(newRotation);
 
-            Vector3 newRotation = transform.rotation.eulerAngles;
-            newRotation.y -= 180f;
-            targetQuaternion = Quaternion.Euler(newRotation);
+            Destroy(this.gameObject);
         }
+    }
+
+    void UpdateRotationTarget()
+    {
+        if (turningAround)
+            turningAround = false;
+
+        rotationTarget = UnityEngine.Random.Range(-(rotationRange / 2), rotationRange / 2);
+        targetQuaternion = Quaternion.Euler(0, rotationTarget, 0);
     }
 }

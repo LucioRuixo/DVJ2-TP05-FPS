@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a699cb9bd0b29e44a909dc6c0915567b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  play: {fileID: 907642256}
+  credits: {fileID: 1795378091}
+  assetsUsed: {fileID: 2050031397}
+  _return: {fileID: 989181087}
 --- !u!114 &205693410
 MonoBehaviour:
   m_ObjectHideFlags: 0
